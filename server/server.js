@@ -1,31 +1,21 @@
 const five = require('johnny-five');
 const firebase = require('firebase');
+const { FIREBASE_CONFIGS } = require('./configs');
 
 const board = new five.Board();
-const firebaseConfig = {
-  apiKey: "AIzaSyC94IyH4QS0ezHpWpxKyKvTj3QiO8801_Q",
-  authDomain: "iot-project-31c8f.firebaseapp.com",
-  databaseURL: "https://iot-project-31c8f.firebaseio.com",
-  projectId: "iot-project-31c8f",
-  storageBucket: "iot-project-31c8f.appspot.com",
-  messagingSenderId: "833064675213",
-  appId: "1:833064675213:web:83615f16199b994fc27fc4",
-  measurementId: "G-9LJSW34LX1"
-};
+
 // Initialize Firebase
-firebase.initializeApp(firebaseConfig);
+firebase.initializeApp(FIREBASE_CONFIGS);
 
 board.on('ready', function() {
-  const led = new five.Led(9);
+  const led = new five.Led(13);
   const db = firebase.firestore();
 
-  // db.collection("leds").doc('led1').get().then(snapshot => console.log(snapshot.data()));
-  db.collection("leds")
-    .doc('led1')
+  db.collection('lampada')
+    .doc('k3PbloklzjBDL3gv07XG')
     .onSnapshot(snapshot => {
-      const { on: ledStatus } = snapshot.data();
-      console.log('status: ', ledStatus);
+      const { status } = snapshot.data();
 
-      ledStatus ? led.on() : led.off();
+      status ? led.on() : led.off();
     });
 });
