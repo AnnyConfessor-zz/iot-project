@@ -3,18 +3,9 @@ import styled from "styled-components";
 import { Switch } from "@material-ui/core";
 import firebase from 'firebase';
 
-const firebaseConfig = {
-  apiKey: "AIzaSyC94IyH4QS0ezHpWpxKyKvTj3QiO8801_Q",
-  authDomain: "iot-project-31c8f.firebaseapp.com",
-  databaseURL: "https://iot-project-31c8f.firebaseio.com",
-  projectId: "iot-project-31c8f",
-  storageBucket: "iot-project-31c8f.appspot.com",
-  messagingSenderId: "833064675213",
-  appId: "1:833064675213:web:83615f16199b994fc27fc4",
-  measurementId: "G-9LJSW34LX1"
-};
+import { FIREBASE_CONFIGS } from './../configs';
 
-firebase.initializeApp(firebaseConfig);
+firebase.initializeApp(FIREBASE_CONFIGS);
 
 const Container = styled.div`
   display: flex;
@@ -28,26 +19,25 @@ const InputGroup = styled.div``;
 
 const Label = styled.label``;
 
-
 const Dashboard = () => {
   const [ledStatus, setLedStatus] = useState(false);
   const db = firebase.firestore();
 
   useEffect(() => {
-    db.collection("leds")
-      .doc('led1')
+    db.collection("lampada")
+      .doc('k3PbloklzjBDL3gv07XG')
       .get()
       .then(snapshot => {
-        const { on: status } = snapshot.data();
-        setLedStatus(status);
+        const { status: ledStatus } = snapshot.data();
+        setLedStatus(ledStatus);
       });
   })
 
   const handleLedStatus = () => {
     setLedStatus(!ledStatus);
-    db.collection("leds")
-    .doc('led1')
-    .set({ on: !ledStatus})
+    db.collection("lampada")
+      .doc('k3PbloklzjBDL3gv07XG')
+      .set({ status: !ledStatus})
   }
 
   return (
